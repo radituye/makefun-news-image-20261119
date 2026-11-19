@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
-"""News-image entry: write the front page to /output/entry.png.
+"""Write the front page to the output directory.
 
-The bundled image (entry.png, 1024x1024, 526851 bytes) sums up the
+The image bundled with this entry, entry.png (1024x1024), sums up the
 world news of Thursday 19 November 2026 as a newspaper front page:
-the masthead names the day, the lead story is the first-ever
-Trump-Xi-Putin trilateral in Shenzhen as APEC opens, and six cards
-cover the Crimea bridge hit for a third day, US-Iran fire widening
-to Kuwait and Bahrain, Cyclone Akvan nearing India's east coast,
-GTA VI launching worldwide, Voyager 1 reaching one light-day from
-Earth, and the EU's proposed 45bn euro loan for Ukraine.
+a masthead for the day, a lead story on the first-ever Trump-Xi-Putin
+trilateral in Shenzhen as APEC opens, six cards for the rest of the
+day's news, and a footer of smaller items.
 
-Deterministic: the same bytes are copied on every run. No network,
-standard library only.
+Running this script copies entry.png to /output/entry.png (or to the
+directory named by MAKEFUN_OUTPUT_DIR). The copy is byte-for-byte
+identical on every run; nothing is fetched from the network and only
+the standard library is used.
 """
+
 import os
 import shutil
 from pathlib import Path
@@ -23,11 +23,11 @@ OUT = Path(os.environ.get("MAKEFUN_OUTPUT_DIR", "/output"))
 
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
-    src = HERE / "entry.png"
-    dst = OUT / "entry.png"
-    shutil.copyfile(src, dst)
-    # Fail loudly on a short copy instead of shipping a broken image.
-    assert dst.stat().st_size == src.stat().st_size, "entry.png copy mismatch"
+    source = HERE / "entry.png"
+    target = OUT / "entry.png"
+    shutil.copyfile(source, target)
+    # Guard against a truncated copy: never ship a broken image.
+    assert target.stat().st_size == source.stat().st_size, "entry.png copy mismatch"
 
 
 if __name__ == "__main__":
